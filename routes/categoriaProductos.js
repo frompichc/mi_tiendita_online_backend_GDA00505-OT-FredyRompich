@@ -9,7 +9,7 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 //Recupera información de categoriaProductos
-router.get('/:filtrarEstado?/:nombreEstado?', authMiddleware, obtenerCategoriaProductos); 
+router.get('/:idCategoriaProducto?/:estado_e_nombreEstado?', authMiddleware, obtenerCategoriaProductos); 
 
 //Inserta información en tabla categoriaProductos
 router.post('/', authMiddleware, crearCategoriaProducto);

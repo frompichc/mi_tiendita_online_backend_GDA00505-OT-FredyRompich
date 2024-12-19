@@ -3,15 +3,15 @@ const sequelize = require('../dbconfig');
 
 const CategoriaProducto = {
 
-    async obtenerCategoriaProductos(filtrarEstado, nombreEstado) {
+    async obtenerCategoriaProductos(idCategoriaProducto, estado_e_nombreEstado) {
         return await sequelize.query
         (`
             Exec ObtenerCategoriaProductos
-                @filtrarEstado = :filtrarEstado,
-                @nombreEstado = :nombreEstado
+                @idCategoriaProducto = :idCategoriaProducto,
+                @estado_e_nombreEstado = :estado_e_nombreEstado
         `,
         {
-            replacements: {filtrarEstado, nombreEstado},
+            replacements: {idCategoriaProducto, estado_e_nombreEstado},
             type: Sequelize.QueryTypes.SELECT
         });
     },

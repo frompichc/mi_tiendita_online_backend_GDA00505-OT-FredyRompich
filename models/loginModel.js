@@ -4,12 +4,10 @@ const sequelize = require('../dbconfig');
 const verificarUsuarioCredenciales = async (correo_electronico) => {
     try {
         const [user] = await sequelize.query
-        (`SELECT 
-            idUsuario, 
-            nombre_completo, 
-            password_usuario 
-        FROM Usuarios 
-        WHERE correo_electronico = :correo_electronico`,
+        (`  
+            Exec ObtenerUsuarioLogin
+                @correo_electronico = :correo_electronico
+        `,
         {
             replacements: { correo_electronico },
             type: Sequelize.QueryTypes.SELECT,

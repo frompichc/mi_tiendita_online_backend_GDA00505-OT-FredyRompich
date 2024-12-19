@@ -105,7 +105,6 @@ const modificarUsuario = async (req, res) => {
 const eliminarUsuario = async (req, res) => {
   try {
     const { idUsuario } = req.params;
-    const { estado_idEstado } = req.body;
 
     const errores = validarCampos({
       idUsuario: {valor: idUsuario, requerido: true, esNumero: true}

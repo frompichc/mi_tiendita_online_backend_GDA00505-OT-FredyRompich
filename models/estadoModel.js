@@ -6,7 +6,10 @@ const Estado = {
     async obtenerEstados(idEstado, e_nombre, nombre) {
         return await sequelize.query
         (`
-            Exec ObtenerEstados @idEstado = :idEstado, @e_nombre = :e_nombre, @nombre = :nombre
+            Exec ObtenerEstados
+                @idEstado = :idEstado,
+                @e_nombre = :e_nombre,
+                @nombre = :nombre
         `,
         {
             replacements: {idEstado, e_nombre, nombre},

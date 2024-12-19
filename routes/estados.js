@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 //Recupera información de estados
-router.get('/:idEstado?/:nombre?', authMiddleware, obtenerEstados); 
+router.get('/:idEstado?/:e_nombre?/:nombre?', authMiddleware, obtenerEstados); 
 
 //Inserta información en tabla estados
 router.post('/', authMiddleware, crearEstado);

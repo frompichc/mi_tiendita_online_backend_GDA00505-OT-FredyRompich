@@ -4,8 +4,8 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 
 const obtenerCategoriaProductos = async (req, res) => {
     try {
-        const { filtrarEstado = '0', nombreEstado = 'Activo' } = req.params
-        const categoriaProductos = await CategoriaProducto.obtenerCategoriaProductos(filtrarEstado, nombreEstado);
+        const { idCategoriaProducto = null, estado_e_nombreEstado = null} = req.query
+        const categoriaProductos = await CategoriaProducto.obtenerCategoriaProductos(idCategoriaProducto, estado_e_nombreEstado);
         res.status(200).json({ success: true, data: categoriaProductos});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al obtener las categorías de productos: ${error.message}`});
