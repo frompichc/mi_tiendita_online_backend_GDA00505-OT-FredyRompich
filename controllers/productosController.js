@@ -11,7 +11,6 @@ const obtenerProductos = async (req, res) => {
             }
             return producto;
         });
-        console.log(productosConFotoBase64);
         res.status(200).json({ success: true, data: productosConFotoBase64});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al obtener los productos: ${error.message}`});
@@ -20,7 +19,6 @@ const obtenerProductos = async (req, res) => {
 
 const crearProducto = async (req, res) => {
     try {
-        console.log('req.body:',req.body);
         const
         {
             categoriaProducto_idCategoriaProducto,

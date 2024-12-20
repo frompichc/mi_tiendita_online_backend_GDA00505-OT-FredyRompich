@@ -4,7 +4,6 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 const obtenerRoles = async (req, res) => {
     try {
         let {idRol = null, estado_e_nombreEstado = null, estado_nombreEstado = null } = req.query;
-        console.log(estado_e_nombreEstado);
       
         const roles = await Rol.obtenerRoles(idRol, estado_e_nombreEstado, estado_nombreEstado);
         res.status(200).json({ success: true, data: roles});

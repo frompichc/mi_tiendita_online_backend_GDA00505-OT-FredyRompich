@@ -25,7 +25,6 @@ const Producto = {
     },
 
     async crearProducto(productoData) {
-        console.log('productData', productoData)
         const
         {
             categoriaProducto_idCategoriaProducto,
