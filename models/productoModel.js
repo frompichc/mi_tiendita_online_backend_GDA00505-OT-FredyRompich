@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
 const sequelize = require('../dbconfig');
-const { eliminarProducto } = require('../controllers/productosController');
 
 const Producto = {
 
@@ -26,6 +25,7 @@ const Producto = {
     },
 
     async crearProducto(productoData) {
+        console.log('productData', productoData)
         const
         {
             categoriaProducto_idCategoriaProducto,
@@ -34,7 +34,7 @@ const Producto = {
             codigo,
             stock,
             precio,
-            foto
+            bufferFoto
         } = productoData;
         const [result, metadata] = await sequelize.query
         (`
@@ -59,7 +59,7 @@ const Producto = {
                 codigo,
                 stock,
                 precio,
-                foto
+                foto: bufferFoto
             },
             type: Sequelize.QueryTypes.RAW
         });

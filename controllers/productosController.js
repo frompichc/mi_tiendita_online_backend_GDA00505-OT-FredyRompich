@@ -4,7 +4,15 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 const obtenerProductos = async (req, res) => {
     try {
         const productos = await Producto.obtenerProductos();
-        res.status(200).json({ success: true, data: productos});
+        const productosConFotoBase64 = productos.map(producto => {
+            if (producto.foto) {
+                // Convertir el buffer binario de foto a base64
+                producto.foto = producto.foto.toString('base64');
+            }
+            return producto;
+        });
+        console.log(productosConFotoBase64);
+        res.status(200).json({ success: true, data: productosConFotoBase64});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al obtener los productos: ${error.message}`});
     }
@@ -12,7 +20,7 @@ const obtenerProductos = async (req, res) => {
 
 const crearProducto = async (req, res) => {
     try {
-        console.log(req.body);
+        console.log('req.body:',req.body);
         const
         {
             categoriaProducto_idCategoriaProducto,
@@ -23,6 +31,8 @@ const crearProducto = async (req, res) => {
             precio,
             foto = null
         } = req.body;
+
+
 
         const errores = validarCampos({
             categoriaProducto_idCategoriaProducto: {valor: categoriaProducto_idCategoriaProducto, requerido: true, esNumero: true},
@@ -36,8 +46,24 @@ const crearProducto = async (req, res) => {
         if (errores.length > 0) {
             return res.status(400).json({ success: false, message: 'Errores de validación', errores });
         }
-        
-        const mensaje = await Producto.crearProducto(req.body);
+        let bufferFoto = null;
+        if (req.body.foto) {
+            const base64Data = req.body.foto; // Foto recibida en Base64
+            bufferFoto = Buffer.from(base64Data, 'base64'); // Convertir Base64 a binario
+        }
+     
+        const mensaje = await Producto.crearProducto(
+            {
+                
+                    categoriaProducto_idCategoriaProducto,
+                    nombre,
+                    marca,
+                    codigo,
+                    stock,
+                    precio,
+                    bufferFoto
+            }
+        );
         if (mensaje.includes('ERROR')) {
             return res.status(500).json({ success: false, message: mensaje});
         }
