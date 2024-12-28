@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 // Obtiene todas las ordenes
-router.get('/', authMiddleware, obtenerOrdenes);
+router.get('/:idOrden?/:estado_e_nombreEstado?/:estado_nombreEstado?/:usuario_idUsuario?', authMiddleware, obtenerOrdenes);
 
 // Crea una nueva orden
 router.post('/', authMiddleware, crearOrden);

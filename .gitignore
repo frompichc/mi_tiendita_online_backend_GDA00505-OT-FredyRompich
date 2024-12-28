@@ -1,0 +1,6 @@
+# Ignorar archivos temporales de sistema
+*.env
+*.tmp
+
+# Ignorar carpetas específicas
+/node_modules/

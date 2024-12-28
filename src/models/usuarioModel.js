@@ -1,11 +1,17 @@
 const { Sequelize } = require('sequelize');
-const sequelize = require('../dbconfig');
-const { eliminarUsuario } = require('../controllers/usuariosController');
+const sequelize = require('../../dbconfig');
+    
 
 const Usuario = {
-    async obtenerUsuarios() {
-        return await sequelize.query(
-            `SELECT idUsuario, rol_idRol, estado_idEstado, correo_electronico, nombre_completo, password_usuario, telefono, fecha_nacimiento, fecha_creacion, cliente_idCliente FROM Usuarios`, {
+    async obtenerUsuarios(idUsuario, estado_e_nombreEstado) {
+        return await sequelize.query
+        (`
+            Exec ObtenerUsuarios
+                @idUsuario = :idUsuario,
+                @estado_e_nombreEstado = :estado_e_nombreEstado
+        `,
+        {
+            replacements: {idUsuario, estado_e_nombreEstado},
             type: Sequelize.QueryTypes.SELECT
         });
     },
@@ -13,13 +19,12 @@ const Usuario = {
     async crearUsuario(usuarioData) {
         const {
             rol_idRol,
-            estado_idEstado,
             correo_electronico,
             nombre_completo,
             hashedPassword,
             telefono,
             fecha_nacimiento,
-             cliente_idCliente
+            cliente_idCliente
         } = usuarioData;
         
         const [result, metadata] = await sequelize.query

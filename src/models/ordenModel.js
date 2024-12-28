@@ -1,26 +1,21 @@
 const { Sequelize } = require('sequelize');
-const sequelize = require('../dbconfig');
+const sequelize = require('../../dbconfig');
 
 const Orden = {
     // Obtener todas las ordenes
-    async obtenerOrdenes() {
-        const result = await sequelize.query(
-            `
-                SELECT 
-                    idOrden,
-                    usuario_idUsuario,
-                    estado_idEstado,
-                    fecha_creacion,
-                    direccion,
-                    telefono,
-                    correo_electronico,
-                    fecha_entrega,
-                    total_orden
-                FROM Ordenes
-            `,
-            {
-                type: Sequelize.QueryTypes.SELECT
-            }
+    async obtenerOrdenes(idOrden, estado_e_nombreEstado, estado_nombreEstado, usuario_idUsuario) {
+        const result = await sequelize.query
+        (`
+            Exec ObtenerOrdenes
+                @idOrden = :idOrden,
+                @estado_e_nombreEstado = :estado_e_nombreEstado,
+                @estado_nombreEstado = :estado_nombreEstado,
+                @usuario_idUsuario = :usuario_idUsuario;
+        `,
+        {
+            replacements: {idOrden, estado_e_nombreEstado, estado_nombreEstado, usuario_idUsuario},
+            type: Sequelize.QueryTypes.SELECT
+        }
         );
         return result;
     },

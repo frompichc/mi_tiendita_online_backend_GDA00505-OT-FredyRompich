@@ -4,7 +4,8 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 
 const obtenerUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.obtenerUsuarios();
+    let {idUsuario = null, estado_e_nombreEstado = null} = req.query;
+    const usuarios = await Usuario.obtenerUsuarios(idUsuario, estado_e_nombreEstado);
     res.status(200).json({ success: true, data: usuarios});
   } catch (error) {
     res.status(500).json({ success: false, message: `Error al obtener los usuarios: ${error.message}`});
@@ -24,13 +25,15 @@ const registrarUsuario = async (req, res) => {
       cliente_idCliente 
     } = req.body;
 
+    
+    console.log(req.body);
     const errores = validarCampos({
       rol_idRol: {valor: rol_idRol, requerido: true, esNumero: true},
       correo_electronico: {valor: correo_electronico, requerido: true, esCorreo: true},
       nombre_completo: {valor: nombre_completo, requerido: true},
       password_usuario: {valor: password_usuario, requerido: true},
       telefono: {valor: telefono, requerido: true, esNumero: true, longitudMin: 8, longitudMax: 8},
-      fecha_nacimiento: {valor: fecha_nacimiento, requerido: true, esFecha: true},
+      //fecha_nacimiento: {valor: fecha_nacimiento, requerido: true, esFecha: true},
       cliente_idCliente: {valor: cliente_idCliente, esNumero: true}  
     });
 

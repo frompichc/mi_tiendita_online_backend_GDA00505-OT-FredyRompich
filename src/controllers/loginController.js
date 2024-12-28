@@ -5,7 +5,6 @@ const { verificarUsuarioCredenciales } = require('../models/loginModel');
 const loginUsuario = async (req, res) => {
     try {
         const { correo_electronico, password_usuario } = req.body;
-        
         const user = await verificarUsuarioCredenciales(correo_electronico);
         if (!user) {
             return res.status(401).json({ success: false, message: 'Credenciales inválidas'});
@@ -31,7 +30,8 @@ const loginUsuario = async (req, res) => {
             message: 'Inicio de sesión exitoso',
             token: token,
             nombreCompleto: user.nombre_completo, // Añadir el nombre completo
-            rol: user.nombre_rol, // Añadir el rol del usuario
+            rol: user.nombre_rol,
+            id: user.idUsuario, 
         });
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al iniciar sesión: ${error.message}`});

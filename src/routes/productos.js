@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 //Recupera información de productos
-router.get('/', authMiddleware, obtenerProductos); 
+router.get('/:idProducto?/:estado_e_nombreEstado?', authMiddleware, obtenerProductos); 
 
 //Inserta información en tabla productos
 router.post('/', authMiddleware, crearProducto);

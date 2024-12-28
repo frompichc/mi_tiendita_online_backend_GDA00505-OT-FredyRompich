@@ -1,30 +1,28 @@
 const { Sequelize } = require('sequelize');
-const sequelize = require('../dbconfig');
+const sequelize = require('../../dbconfig');
 
-const Rol = {
-    async obtenerRoles(idRol, estado_e_nombreEstado, estado_nombreEstado) {
-     
+const CategoriaProducto = {
+
+    async obtenerCategoriaProductos(idCategoriaProducto, estado_e_nombreEstado) {
         return await sequelize.query
         (`
-            EXEC ObtenerRoles 
-                @idRol = :idRol,
-                @estado_e_nombreEstado = :estado_e_nombreEstado, 
-                @estado_nombreEstado = :estado_nombreEstado 
+            Exec ObtenerCategoriaProductos
+                @idCategoriaProducto = :idCategoriaProducto,
+                @estado_e_nombreEstado = :estado_e_nombreEstado
         `,
         {
-            replacements: {idRol, estado_e_nombreEstado, estado_nombreEstado, },
+            replacements: {idCategoriaProducto, estado_e_nombreEstado},
             type: Sequelize.QueryTypes.SELECT
         });
     },
 
-    async crearRol(rolData) {
-        const {nombre} = rolData;
-
+    async crearCategoriaProductos(categoriaProductosData) {
+        const {nombre} = categoriaProductosData;
         const [result, metadata] = await sequelize.query
         (`
             DECLARE @mensaje NVARCHAR(1000);
-            EXEC InsertarRol
-                @nombre= :nombre,
+            Exec InsertarCategoriaProducto
+                @nombre = :nombre,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
         `,
@@ -33,44 +31,42 @@ const Rol = {
             type: Sequelize.QueryTypes.RAW
         });
         return result[0].mensaje;
-
     },
 
-    async modificarRol(idRol, rolData) {
-        const {nombre, estado_idEstado} = rolData;
-
+    async modificarCategoriaProductos(idCategoriaProducto, categoriaProductosData) {
+        const {nombre, estado_idEstado} = categoriaProductosData;
         const [result, metadata] = await sequelize.query
         (`
             DECLARE @mensaje NVARCHAR(1000);
-            Exec ModificarRol 
-                @idRol = :idRol, 
-                @nombre = :nombre, 
+            Exec ModificarCategoriaProducto
+                @idCategoriaProducto = :idCategoriaProducto,
+                @nombre = :nombre,
                 @estado_idEstado = :estado_idEstado,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
         `,
         {
-            replacements: {idRol, nombre, estado_idEstado},
+            replacements: {idCategoriaProducto, nombre, estado_idEstado},
             type: Sequelize.QueryTypes.RAW
         });
         return result[0].mensaje;
     },
 
-    async eliminarRol(idRol) {
+    async eliminarCategoriaProducto(idCategoriaProducto) {
         const [result, metadata] = await sequelize.query
         (`
             DECLARE @mensaje NVARCHAR(1000);
-            Exec EliminarRol
-                @idRol = :idRol,
+            Exec EliminarCategoriaProducto
+                @idCategoriaProducto = :idCategoriaProducto,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
         `,
         {
-            replacements: {idRol},
+            replacements: { idCategoriaProducto },
             type: Sequelize.QueryTypes.RAW
         });
         return result[0].mensaje;
     }
 };
 
-module.exports = Rol;
+module.exports = CategoriaProducto;

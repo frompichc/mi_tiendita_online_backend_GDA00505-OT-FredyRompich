@@ -4,13 +4,13 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 //Recupera información de usuarios
-router.get('/', authMiddleware, obtenerUsuarios);
+router.get('/', obtenerUsuarios);
 
 //Inserta información en tabla usuarios
-router.post('/', authMiddleware, registrarUsuario);
+router.post('/',  authMiddleware, registrarUsuario);
 
 //Modifica información en tabla usuarios
-router.put('/:idUsuario', authMiddleware, modificarUsuario);
+router.put('/:idUsuario',  modificarUsuario);
 
 //Elimina información en tabla usuarios
 router.delete('/:idUsuario', authMiddleware, eliminarUsuario);

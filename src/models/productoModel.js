@@ -1,25 +1,17 @@
 const { Sequelize } = require('sequelize');
-const sequelize = require('../dbconfig');
+const sequelize = require('../../dbconfig');
 
 const Producto = {
 
-    async obtenerProductos() {
+    async obtenerProductos(idProducto, estado_e_nombreEstado) {
         return await sequelize.query
         (`
-            SELECT
-                idProducto,
-                categoriaProducto_idCategoriaProducto,
-                nombre,
-                marca,
-                codigo,
-                stock,
-                estado_idEstado,
-                precio,
-                fecha_creacion,
-                foto
-            FROM Productos
+            EXEC ObtenerProductos
+                @idProducto = :idProducto,
+                @estado_e_nombreEstado = :estado_e_nombreEstado 
         `,
         {
+            replacements: {idProducto, estado_e_nombreEstado},
             type: Sequelize.QueryTypes.SELECT
         })
     },
@@ -33,7 +25,8 @@ const Producto = {
             codigo,
             stock,
             precio,
-            bufferFoto
+            bufferFoto,
+            tipoImagen,
         } = productoData;
         const [result, metadata] = await sequelize.query
         (`
@@ -46,6 +39,7 @@ const Producto = {
                 @stock = :stock,
                 @precio = :precio,
                 @foto = :foto,
+                @tipoImagen = :tipoImagen,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
         `, 
@@ -58,7 +52,8 @@ const Producto = {
                 codigo,
                 stock,
                 precio,
-                foto: bufferFoto
+                foto: bufferFoto,
+                tipoImagen
             },
             type: Sequelize.QueryTypes.RAW
         });
@@ -75,7 +70,8 @@ const Producto = {
             stock,
             estado_idEstado,
             precio,
-            foto
+            bufferFoto,
+            tipoImagen
         } = productoData;
 
         const [result, metadata] = await sequelize.query(`
@@ -90,6 +86,7 @@ const Producto = {
                 @estado_idEstado = :estado_idEstado,
                 @precio = :precio,
                 @foto = :foto,
+                @tipoImagen = :tipoImagen,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;           
         `, 
@@ -104,7 +101,8 @@ const Producto = {
                 stock,
                 estado_idEstado,
                 precio,
-                foto
+                foto: bufferFoto,
+                tipoImagen
             },
             type: Sequelize.QueryTypes.RAW
         });

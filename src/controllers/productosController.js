@@ -3,14 +3,17 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 
 const obtenerProductos = async (req, res) => {
     try {
-        const productos = await Producto.obtenerProductos();
+       
+        let {idProducto = null, estado_e_nombreEstado = null} = req.query;
+        const productos = await Producto.obtenerProductos(idProducto, estado_e_nombreEstado);
         const productosConFotoBase64 = productos.map(producto => {
             if (producto.foto) {
                 // Convertir el buffer binario de foto a base64
-                producto.foto = producto.foto.toString('base64');
+                producto.foto = producto.tipoImagen + producto.foto.toString('base64');
             }
             return producto;
         });
+      
         res.status(200).json({ success: true, data: productosConFotoBase64});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al obtener los productos: ${error.message}`});
@@ -27,11 +30,9 @@ const crearProducto = async (req, res) => {
             codigo,
             stock,
             precio,
-            foto = null
+            foto = null,
         } = req.body;
-
-
-
+   
         const errores = validarCampos({
             categoriaProducto_idCategoriaProducto: {valor: categoriaProducto_idCategoriaProducto, requerido: true, esNumero: true},
             nombre: {valor: nombre, requerido: true},
@@ -45,21 +46,24 @@ const crearProducto = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Errores de validación', errores });
         }
         let bufferFoto = null;
+        let tipoImagen = null;
+        // Convertir Base64 a binario
+        console.log(req.body.foto.slice(0,100));
         if (req.body.foto) {
-            const base64Data = req.body.foto; // Foto recibida en Base64
+            tipoImagen = req.body.foto.split(',')[0]+',';
+            const base64Data = req.body.foto.split(',')[1];
             bufferFoto = Buffer.from(base64Data, 'base64'); // Convertir Base64 a binario
         }
-     
         const mensaje = await Producto.crearProducto(
             {
-                
-                    categoriaProducto_idCategoriaProducto,
-                    nombre,
-                    marca,
-                    codigo,
-                    stock,
-                    precio,
-                    bufferFoto
+                categoriaProducto_idCategoriaProducto,
+                nombre,
+                marca,
+                codigo,
+                stock,
+                precio,
+                bufferFoto,
+                tipoImagen
             }
         );
         if (mensaje.includes('ERROR')) {
@@ -82,11 +86,10 @@ const modificarProducto = async (req, res) => {
             marca,
             codigo,
             stock,
-            estado_idEstado = 1,
+            estado_idEstado,
             precio,
-            foto
+            foto = null
         } = req.body;
-        
         const errores = validarCampos({
             idProducto: {valor: idProducto, requerido: true, esNumero: true},
             categoriaProducto_idCategoriaProducto: {valor: categoriaProducto_idCategoriaProducto, requerido: true, esNumero: true},
@@ -101,8 +104,29 @@ const modificarProducto = async (req, res) => {
         if (errores.length > 0) {
             return res.status(400).json({ success: false, message: 'Errores de validación', errores });
         }
-
-        const mensaje = await Producto.modificarProducto(idProducto, req.body);
+        console.log('imprime esto', req.body.foto.slice(0,100));
+        let bufferFoto = null;
+        let tipoImagen = null;
+        // Convertir Base64 a binario
+        if (req.body.foto) {
+            tipoImagen = req.body.foto.split(',')[0]+',';
+            const base64Data = req.body.foto.split(',')[1];
+            bufferFoto = Buffer.from(base64Data, 'base64'); // Convertir Base64 a binario
+        }
+        const mensaje = await Producto.modificarProducto(idProducto,
+            {
+                categoriaProducto_idCategoriaProducto,
+                nombre,
+                marca,
+                codigo,
+                stock,
+                estado_idEstado,
+                precio,
+                bufferFoto,
+                tipoImagen
+    
+            }
+        );
         if (mensaje.includes('ERROR')) {
             return res.status(500).json({ success: false, message: mensaje});
         }

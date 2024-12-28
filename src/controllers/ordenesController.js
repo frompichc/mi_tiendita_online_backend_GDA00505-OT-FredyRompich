@@ -4,8 +4,21 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 
 // Obtiene todas las órdenes
 const obtenerOrdenes = async (req, res) => {
+    const 
+    {
+        idOrden = null, 
+        estado_e_nombreEstado = null, 
+        estado_nombreEstado = null, 
+        usuario_idUsuario = null 
+    } = req.query;
     try {
-        const ordenes = await Orden.obtenerOrdenes();
+        const ordenes = await Orden.obtenerOrdenes
+        (
+            idOrden, 
+            estado_e_nombreEstado, 
+            estado_nombreEstado, 
+            usuario_idUsuario
+        );
         res.status(200).json({ success: true, data: ordenes});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al recuperar información de las ordenes: ${error.message}`});
