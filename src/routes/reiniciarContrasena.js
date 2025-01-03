@@ -8,6 +8,6 @@ const router = express.Router();
 
 //Reiniciar contraseña
 router.put('/:idUsuario',  authMiddleware, verificarRol(['Operador']), reiniciarContrasena);
-router.put('/:idUsuario',  reiniciarContrasena);
+//router.put('/:idUsuario',  reiniciarContrasena);
 
 module.exports = router;
