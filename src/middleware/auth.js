@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
 
     // Verificar si el token existe
     if (!token) {
-        return res.status(401).send('Acceso denegado. Token no proporcionado.');
+        return res.status(401).send({success: false, message: 'Acceso denegado. Token no proporcionado.'});
     }
 
     try {
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded; // Agregar los datos del usuario al objeto `req`
         next(); // Continuar hacia el siguiente middleware o controlador
     } catch (error) {
-        res.status(401).send('Token inválido.');
+        res.status(401).send({success: false, message: 'Token inválido.'});
     }
 };
 

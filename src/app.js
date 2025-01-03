@@ -9,7 +9,9 @@ const categoriaProductosRoutes = require('./routes/categoriaProductos');
 const clientesRoutes = require('./routes/clientes');
 const productosRoutes = require('./routes/productos');
 const ordenesRoutes = require('./routes/orden');
+const ordenDetallesRoutes = require('./routes/ordenDetalles');
 const loginRoutes = require('./routes/login');
+const reiniciarContrasenaRoutes = require('./routes/reiniciarContrasena');
 
 const port = 5000;
 const app = express();
@@ -29,6 +31,8 @@ app.use('/clientes', clientesRoutes);
 app.use('/productos', productosRoutes);
 app.use('/ordenes', ordenesRoutes);
 app.use('/login', loginRoutes);
+app.use('/ordendetalles', ordenDetallesRoutes);
+app.use('/reiniciar', reiniciarContrasenaRoutes)
 
 
 app.get('/', (req, res) => {

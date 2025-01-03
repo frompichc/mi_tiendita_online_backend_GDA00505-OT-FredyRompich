@@ -22,18 +22,20 @@ const registrarUsuario = async (req, res) => {
       password_usuario, 
       telefono, 
       fecha_nacimiento, 
-      cliente_idCliente 
+      cliente_idCliente = null
     } = req.body;
 
-    
-    console.log(req.body);
+    const [dia, mes, anio] = fecha_nacimiento.split('/');
+    const fecha_nacimiento_date = new Date(`${anio}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`);
+    const fecha_nacimiento_string = fecha_nacimiento_date.toISOString().split('T')[0]; 
+
     const errores = validarCampos({
       rol_idRol: {valor: rol_idRol, requerido: true, esNumero: true},
       correo_electronico: {valor: correo_electronico, requerido: true, esCorreo: true},
       nombre_completo: {valor: nombre_completo, requerido: true},
       password_usuario: {valor: password_usuario, requerido: true},
       telefono: {valor: telefono, requerido: true, esNumero: true, longitudMin: 8, longitudMax: 8},
-      //fecha_nacimiento: {valor: fecha_nacimiento, requerido: true, esFecha: true},
+      fecha_nacimiento: {valor: fecha_nacimiento_date, requerido: true, esFecha: true},
       cliente_idCliente: {valor: cliente_idCliente, esNumero: true}  
     });
 
@@ -45,7 +47,7 @@ const registrarUsuario = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password_usuario, 10);
     const mensaje = await Usuario.crearUsuario({
       rol_idRol, estado_idEstado, correo_electronico, nombre_completo,
-      hashedPassword, telefono, fecha_nacimiento, cliente_idCliente
+      hashedPassword, telefono, fecha_nacimiento_string, cliente_idCliente
     });
 
     if (mensaje.includes('ERROR')) {
@@ -66,9 +68,7 @@ const modificarUsuario = async (req, res) => {
       estado_idEstado, 
       correo_electronico, 
       nombre_completo, 
-      password_usuario, 
       telefono, 
-      fecha_nacimiento, 
       cliente_idCliente 
     } = req.body;
 
@@ -78,9 +78,7 @@ const modificarUsuario = async (req, res) => {
       estado_idEstado: {valor: estado_idEstado, requerido: true, esNumero: true},
       correo_electronico: {valor: correo_electronico, requerido: true, esCorreo: true},
       nombre_completo: {valor: nombre_completo, requerido: true},
-      password_usuario: {valor: password_usuario, requerido: true},
       telefono: {valor: telefono, requerido: true, esNumero: true, longitudMin: 8, longitudMax: 8},
-      fecha_nacimiento: {valor: fecha_nacimiento, requerido: true, esFecha: true},
       cliente_idCliente: {valor: cliente_idCliente, esNumero: true}  
     });
 
@@ -88,11 +86,9 @@ const modificarUsuario = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Errores de validación', errores });
     }
   
-    
-    const hashedPassword = await bcrypt.hash(password_usuario, 10);
     const mensaje = await Usuario.modificarUsuario(idUsuario, {
       rol_idRol, estado_idEstado, correo_electronico, nombre_completo,
-      hashedPassword, telefono, fecha_nacimiento, cliente_idCliente
+      telefono, cliente_idCliente
     });
 
     if (mensaje.includes('ERROR')) {

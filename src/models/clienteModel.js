@@ -3,20 +3,16 @@ const sequelize = require('../../dbconfig');
 
 const Cliente = {
 
-    async obtenerClientes() {
+    async obtenerClientes(idCliente, estado_e_nombreEstado, estado_nombreEstado) {
         return await sequelize.query
         (`
-            SELECT 
-                idCliente,
-                razon_social,
-                nombre_comercial,
-                direccion_entrega,
-                telefono,
-                email,
-                estado_idEstado
-            FROM clientes
+            Exec ObtenerClientes
+                @idCliente = :idCliente,
+                @estado_e_nombreEstado = :estado_e_nombreEstado,
+                @estado_nombreEstado = :estado_nombreEstado;
         `,
         {
+            replacements: { idCliente, estado_e_nombreEstado, estado_nombreEstado },
             type: Sequelize.QueryTypes.SELECT
         });
     },

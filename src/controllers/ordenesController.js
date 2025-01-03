@@ -91,4 +91,31 @@ const modificarOrden = async (req, res) => {
     }
 };
 
-module.exports = { obtenerOrdenes, crearOrden, modificarOrden };
+const entregarOrden = async (req, res) => {
+    try {
+        const { idOrden } = req.params;
+        const mensaje = await Orden.entregarOrdenConDetalle(idOrden);
+        if (mensaje.includes('ERROR')) {
+            return res.status(500).json({ success: false, message: mensaje});
+        }
+        res.status(200).json({ success: true, message: `Orden con id ${idOrden} entregada exitosamente`});
+    } catch (error) {
+        res.status(500).json({ success: false, message: `Error al entregar la orden: ${error.message}`});
+    }
+}
+
+const rechazarOrden = async (req, res) => {
+    try {
+        const { idOrden } = req.params;
+        const mensaje = await Orden.rechazarOrdenConDetalle(idOrden);
+        if (mensaje.includes('ERROR')) {
+            return res.status(500).json({ success: false, message: mensaje});
+        }
+        res.status(200).json({ success: true, message: `Orden con id ${idOrden} rechazada exitosamente`});
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: `Error al rechazar la orden: ${error.message}`});
+    }
+}
+
+module.exports = { obtenerOrdenes, crearOrden, modificarOrden, entregarOrden, rechazarOrden };

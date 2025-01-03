@@ -52,6 +52,38 @@ const Orden = {
             type: Sequelize.QueryTypes.RAW
         });
         return result[0].mensaje;
+    },
+
+    async entregarOrdenConDetalle(idOrden) {
+        const [result, metadata] = await sequelize.query
+        (`
+            DECLARE @mensaje NVARCHAR(1000);
+            Exec EntregarOrdenConDetalle
+                @idOrden = :idOrden,
+                @mensaje = @mensaje OUTPUT;
+            SELECT @mensaje AS mensaje;
+        `,
+        {
+            replacements: { idOrden },
+            type: Sequelize.QueryTypes.RAW
+        });
+        return result[0].mensaje;
+    },
+
+    async rechazarOrdenConDetalle(idOrden) {
+        const [result, metadata] = await sequelize.query
+        (`
+            DECLARE @mensaje NVARCHAR(1000);
+            Exec RechazarOrdenConDetalle
+                @idOrden = :idOrden,
+                @mensaje = @mensaje OUTPUT;
+            SELECT @mensaje AS mensaje;
+        `,
+        {
+            replacements: { idOrden },
+            type: Sequelize.QueryTypes.RAW
+        });
+        return result[0].mensaje;
     }
 };
 

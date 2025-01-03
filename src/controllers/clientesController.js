@@ -3,7 +3,8 @@ const { validarCampos } = require('../helpers/validacionesCamposHelper');
 
 const obtenerClientes = async (req, res) => {
     try {
-        const clientes = await Cliente.obtenerClientes();
+        const { idCliente = null, estado_e_nombreEstado = null, estado_nombreEstado = null } = req.query;
+        const clientes = await Cliente.obtenerClientes(idCliente, estado_e_nombreEstado, estado_nombreEstado);
         res.status(200).json({ success: true, data: clientes});
     } catch (error) {
         res.status(500).json({ success: false, message: `Error al obtener los clientes: ${error.message}`});

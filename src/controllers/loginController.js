@@ -18,7 +18,8 @@ const loginUsuario = async (req, res) => {
         // Crear el payload para el JWT
         const payload = {
             idUsuario: user.idUsuario,
-            correo_electronico,
+            correo_electronico: correo_electronico,
+            rol: user.nombre_rol  
         };
 
         // Generar el JWT
@@ -29,7 +30,7 @@ const loginUsuario = async (req, res) => {
             success: true,
             message: 'Inicio de sesión exitoso',
             token: token,
-            nombreCompleto: user.nombre_completo, // Añadir el nombre completo
+            nombreCompleto: user.nombre_completo, 
             rol: user.nombre_rol,
             id: user.idUsuario, 
         });

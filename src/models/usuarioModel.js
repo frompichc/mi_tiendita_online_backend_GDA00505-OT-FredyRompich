@@ -23,10 +23,10 @@ const Usuario = {
             nombre_completo,
             hashedPassword,
             telefono,
-            fecha_nacimiento,
-            cliente_idCliente
+            fecha_nacimiento_string,
+            cliente_idCliente = null
         } = usuarioData;
-        
+     
         const [result, metadata] = await sequelize.query
             (`
                 DECLARE @mensaje NVARCHAR(1000);
@@ -36,7 +36,7 @@ const Usuario = {
                     @nombre_completo = :nombre_completo,
                     @password_usuario = :hashedPassword,
                     @telefono = :telefono,
-                    @fecha_nacimiento = :fecha_nacimiento,
+                    @fecha_nacimiento = :fecha_nacimiento_string,
                     @cliente_idCliente = :cliente_idCliente,
                     @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
@@ -49,7 +49,7 @@ const Usuario = {
                     nombre_completo,
                     hashedPassword,
                     telefono,
-                    fecha_nacimiento,
+                    fecha_nacimiento_string,
                     cliente_idCliente
                 },
                 type: Sequelize.QueryTypes.RAW
@@ -63,9 +63,7 @@ const Usuario = {
             estado_idEstado,
             correo_electronico,
             nombre_completo,
-            hashedPassword,
             telefono,
-            fecha_nacimiento,
             cliente_idCliente
         } = usuarioData;
     
@@ -78,9 +76,7 @@ const Usuario = {
                 @estado_idEstado = :estado_idEstado,
                 @correo_electronico = :correo_electronico,
                 @nombre_completo = :nombre_completo,
-                @password_usuario = :hashedPassword,
                 @telefono = :telefono,
-                @fecha_nacimiento = :fecha_nacimiento,
                 @cliente_idCliente = :cliente_idCliente,
                 @mensaje = @mensaje OUTPUT;
             SELECT @mensaje AS mensaje;
@@ -92,9 +88,7 @@ const Usuario = {
                 estado_idEstado,
                 correo_electronico,
                 nombre_completo,
-                hashedPassword,
                 telefono,
-                fecha_nacimiento,
                 cliente_idCliente
             },
             type: Sequelize.QueryTypes.RAW

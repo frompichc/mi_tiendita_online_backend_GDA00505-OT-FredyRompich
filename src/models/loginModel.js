@@ -19,4 +19,6 @@ const verificarUsuarioCredenciales = async (correo_electronico) => {
     }
 };
 
+
+
 module.exports = { verificarUsuarioCredenciales };
