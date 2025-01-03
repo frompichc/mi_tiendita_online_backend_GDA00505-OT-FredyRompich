@@ -112,12 +112,13 @@ const eliminarUsuario = async (req, res) => {
     if (errores.length > 0) {
       return res.status(400).json({ success: false, message: 'Errores de validación', errores });
     }
-
     const mensaje = await Usuario.eliminarUsuario(idUsuario);
     if (mensaje.includes('ERROR')) {
       return res.status(500).json({ success: false, message: mensaje});
     }
     res.status(200).json({ success: true, message: 'Usuario eliminado correctamente'});
+   
+
   } catch (error) {
     res.status(500).send({ success: false, message: `Error al eliminar usuario: ${error.message}`});
   }

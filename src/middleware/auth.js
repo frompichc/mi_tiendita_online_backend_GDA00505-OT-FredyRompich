@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const { verificarToken } = require('../helpers/authHelper');
 
 const authMiddleware = (req, res, next) => {
     const token = req.headers['authorization'];
@@ -9,10 +9,14 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        // Validar el token
-        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
-        req.user = decoded; // Agregar los datos del usuario al objeto `req`
-        next(); // Continuar hacia el siguiente middleware o controlador
+        //Valida token
+        const decoded = verificarToken(token);
+        req.user = decoded;
+        //Valida estado del usuario 
+        if (req.user.estado !== 'Activo') {
+            return res.status(403).send({success: false, message: 'Cuenta inactiva. No tienes permiso para realizar esta acción.'});
+        }
+        next(); 
     } catch (error) {
         res.status(401).send({success: false, message: 'Token inválido.'});
     }
