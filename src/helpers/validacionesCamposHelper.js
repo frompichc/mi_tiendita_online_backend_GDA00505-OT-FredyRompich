@@ -3,6 +3,7 @@ const validarCampos = (campos) => {
 
     for (const [campo, reglas] of Object.entries(campos)) {
         const valor = reglas.valor;
+        console.log(valor);
         if (reglas.requerido && !valor) {
             errores.push(`El campo ${campo} es obligatorio`);
         }
@@ -31,7 +32,6 @@ const validarCampos = (campos) => {
             errores.push(`${nombreCampo} debe ser un número decimal válido`);
         }
     };
-
     return errores;
 }
 

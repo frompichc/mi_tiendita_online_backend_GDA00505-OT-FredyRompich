@@ -29,7 +29,6 @@ const obtenerOrdenes = async (req, res) => {
 const crearOrden = async (req, res) => {
     try {
         const ordenConDetalle = req.body;
-
         const errores = validarCampos({
             usuario_idUsuario: { valor: ordenConDetalle.usuario_idUsuario, requerido: true, esNumero: true },
             direccion: { valor: ordenConDetalle.direccion, requerido: true },
@@ -38,13 +37,12 @@ const crearOrden = async (req, res) => {
             fecha_entrega: { valor: ordenConDetalle.fecha_entrega, requerido: true, esFecha: true },
             total_orden: { valor: ordenConDetalle.total_orden, requerido: true, esDecimal: true },
         });
-
         if (errores.length > 0) {
             return res.status(400).json({ success: false, message: 'Errores de validación', errores });
         }
 
         const ordenConDetalleJSON = JSON.stringify(ordenConDetalle);
-
+        
         const mensaje = await Orden.crearOrdenConDetalle(ordenConDetalleJSON);
         if (mensaje.includes('ERROR')) {
             return res.status(500).json({ success: false, message: mensaje});
